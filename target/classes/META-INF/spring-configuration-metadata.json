@@ -1,0 +1,62 @@
+{
+  "groups": [
+    {
+      "name": "comfyui",
+      "type": "com.example.dosh.config.ComfyUIConfig",
+      "sourceType": "com.example.dosh.config.ComfyUIConfig"
+    },
+    {
+      "name": "minio",
+      "type": "com.example.dosh.config.MinioConfig",
+      "sourceType": "com.example.dosh.config.MinioConfig"
+    },
+    {
+      "name": "volcengine",
+      "type": "com.example.dosh.config.VolcengineConfig",
+      "sourceType": "com.example.dosh.config.VolcengineConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "comfyui.server-address",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.ComfyUIConfig"
+    },
+    {
+      "name": "minio.access-key",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.MinioConfig"
+    },
+    {
+      "name": "minio.bucket",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.MinioConfig"
+    },
+    {
+      "name": "minio.endpoint",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.MinioConfig"
+    },
+    {
+      "name": "minio.secret-key",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.MinioConfig"
+    },
+    {
+      "name": "volcengine.api-key",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.VolcengineConfig"
+    },
+    {
+      "name": "volcengine.api-url",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.VolcengineConfig"
+    },
+    {
+      "name": "volcengine.model",
+      "type": "java.lang.String",
+      "sourceType": "com.example.dosh.config.VolcengineConfig"
+    }
+  ],
+  "hints": []
+}

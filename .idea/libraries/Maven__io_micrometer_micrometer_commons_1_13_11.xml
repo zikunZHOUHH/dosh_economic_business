@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.micrometer:micrometer-commons:1.13.11">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../environment/maven-repo/io/micrometer/micrometer-commons/1.13.11/micrometer-commons-1.13.11.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../../environment/maven-repo/io/micrometer/micrometer-commons/1.13.11/micrometer-commons-1.13.11-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../environment/maven-repo/io/micrometer/micrometer-commons/1.13.11/micrometer-commons-1.13.11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

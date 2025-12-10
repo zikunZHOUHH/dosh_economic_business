@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: dosh
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+# AI Service Configuration
+ai:
+  intent:
+    url: http://localhost:8000/predict
+
+# ChatGLM Configuration
+chatglm:
+  api:
+    key: 5d63c83211fa404d8672f3403ebf87f1.Tr63lrJgONmG49SU
+    url: https://open.bigmodel.cn/api/paas/v4/chat/completions
+  model: glm-4.5
+
+# Volcengine (Doubao) Configuration for Video Analysis
+volcengine:
+  api-key: 7bd71cf0-c8a3-446b-9775-7e5f945f0a83
+  api-url: https://ark.cn-beijing.volces.com/api/v3/responses
+  model: doubao-seed-1-6-251015
+
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket: testminio
+
+# ComfyUI Configuration
+comfyui:
+  server-address: 127.0.0.1:8188
+
+# FFmpeg Configuration
+ffmpeg:
+  path: D:/ffmpeg/bin/ffmpeg.exe
+ffprobe:
+  path: D:/ffmpeg/bin/ffprobe.exe

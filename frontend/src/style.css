@@ -1,0 +1,358 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Chat Layout */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  background-color: #343541; /* ChatGPT dark background */
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-row {
+  display: flex;
+  width: 100%;
+  padding: 10px 20px; /* Side padding for the screen */
+  box-sizing: border-box;
+}
+
+/* User Message Alignment (Right) */
+.message-row.user {
+  justify-content: flex-end;
+}
+
+/* Assistant Message Alignment (Left) */
+.message-row.assistant {
+  justify-content: flex-start;
+  background-color: transparent; /* No full-width background */
+}
+
+.message-content {
+  display: flex;
+  gap: 12px;
+  max-width: 80%; /* Limit width of messages */
+  text-align: left;
+}
+
+/* User Content Layout (Reverse for Avatar on Right) */
+.message-row.user .message-content {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 4px; /* Slight alignment fix with text */
+}
+
+.avatar.user {
+  background-color: #5436DA;
+}
+
+.avatar.assistant {
+  background-color: #19C37D;
+}
+
+/* Message Body & Bubbles */
+.message-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+/* User Bubble Style */
+.message-row.user .message-body {
+  background-color: #565869; /* Light gray bubble for dark mode */
+  padding: 10px 14px;
+  border-radius: 12px;
+  border-top-right-radius: 2px; /* Optional: pointed corner near avatar */
+}
+
+/* Assistant Style (No Bubble) */
+.message-row.assistant .message-body {
+  padding: 4px 0; /* Minimal padding */
+}
+
+.text {
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-wrap: break-word;
+}
+
+/* Input Area */
+.input-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-image: linear-gradient(180deg, rgba(53,55,64,0), #353740 58.85%);
+  padding: 24px 0 48px;
+  display: flex;
+  justify-content: center;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  /* Removed max-width here, moved to wrapper */
+  background-color: #40414F;
+  border: 1px solid rgba(32,33,35,0.5);
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: row; /* Changed to row */
+  align-items: flex-end; /* Align to bottom */
+  padding: 12px 16px;
+  gap: 10px;
+}
+
+textarea {
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  max-height: 200px;
+  outline: none;
+  resize: none;
+  width: 100%;
+  flex: 1; /* Take remaining space */
+  padding-right: 40px; /* Space for send button */
+}
+
+.send-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: rgb(142, 142, 160);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.send-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: rgb(217, 217, 227);
+}
+
+.send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Markdown Styles */
+.text pre {
+  background-color: black;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.text code {
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.text p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.text p:last-child {
+  margin-bottom: 0;
+}
+
+/* New Components */
+.input-box-wrapper {
+  width: 100%;
+  max-width: 768px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-previews {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: #40414F;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.file-preview-item {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #202123;
+  flex-shrink: 0;
+}
+
+.file-preview-item img, .file-preview-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+}
+
+.attach-btn {
+  background: transparent;
+  border: none;
+  color: rgb(217, 217, 227);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.attach-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+
+/* Message Files */
+.message-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.message-file {
+  max-width: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.history-image, .history-video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- New Styles for Centered Layout (ChatGPT Style) --- */
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  color: #fff;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.hero-logo {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Initial State Layout */
+.chat-container.initial-state {
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-container.initial-state .input-area {
+  position: static; /* Reset fixed positioning */
+  width: 100%;
+  max-width: 768px;
+  background: transparent; /* Remove gradient background */
+  padding: 0 20px; /* Add some padding */
+  bottom: auto;
+}
+
+.chat-container.initial-state .input-box-wrapper {
+  max-width: 100%; /* Ensure it fills the container */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
