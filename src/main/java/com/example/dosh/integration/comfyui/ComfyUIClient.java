@@ -48,8 +48,10 @@ public class ComfyUIClient {
 
         try {
             // 1. Prepare Workflow
+            long seed = Math.abs(new Random().nextLong());
             String workflowJson = ComfyUIWorkflowTemplates.WAN_2_1_WORKFLOW
-                    .replace("%POSITIVE_PROMPT%", promptText.replace("\"", "\\\"")); // Simple escape
+                    .replace("%POSITIVE_PROMPT%", promptText.replace("\"", "\\\"")) // Simple escape
+                    .replace("%SEED%", String.valueOf(seed));
             
             JsonNode prompt = mapper.readTree(workflowJson);
 
@@ -93,17 +95,18 @@ public class ComfyUIClient {
     }
 
     private Map<String, ByteBuffer> executeWorkflow(JsonNode prompt, String clientId) throws Exception {
+        // 0. Free Memory (Try to unload models before starting)
+        unloadModels();
+
         Map<String, ByteBuffer> outputImages = new ConcurrentHashMap<>();
         
-        // 1. Queue Prompt
-        JsonNode responseNode = queuePrompt(prompt, clientId);
-        String promptId = responseNode.get("prompt_id").asText();
-        log.info("ComfyUI Prompt queued. ID: {}", promptId);
-
-        // 2. WebSocket Listener
+        // 1. WebSocket Listener (Connect BEFORE queuing prompt)
         CountDownLatch latch = new CountDownLatch(1);
         String serverAddress = comfyUIConfig.getServerAddress();
         String wsUrl = String.format("ws://%s/ws?clientId=%s", serverAddress, clientId);
+
+        // We need a container for promptId because it's available only after queueing
+        final StringBuilder promptIdRef = new StringBuilder();
 
         WebSocketClient wsClient = new WebSocketClient(new URI(wsUrl)) {
             private String currentNode = "";
@@ -119,7 +122,8 @@ public class ComfyUIClient {
                     JsonNode msg = mapper.readTree(message);
                     if (msg.has("type") && "executing".equals(msg.get("type").asText())) {
                         JsonNode data = msg.get("data");
-                        if (data.has("prompt_id") && data.get("prompt_id").asText().equals(promptId)) {
+                        String currentPromptId = promptIdRef.toString();
+                        if (!currentPromptId.isEmpty() && data.has("prompt_id") && data.get("prompt_id").asText().equals(currentPromptId)) {
                             if (data.get("node").isNull()) {
                                 log.info("ComfyUI Execution finished.");
                                 latch.countDown();
@@ -162,6 +166,13 @@ public class ComfyUIClient {
         };
 
         wsClient.connectBlocking();
+        
+        // 2. Queue Prompt
+        JsonNode responseNode = queuePrompt(prompt, clientId);
+        String promptId = responseNode.get("prompt_id").asText();
+        promptIdRef.append(promptId);
+        log.info("ComfyUI Prompt queued. ID: {}", promptId);
+
         log.info("Waiting for ComfyUI execution...");
         
         // Wait up to 60 minutes (configurable?)
@@ -250,6 +261,26 @@ public class ComfyUIClient {
         try (Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Download failed: " + response);
             return response.body().bytes();
+        }
+    }
+
+    private void unloadModels() {
+        try {
+            String url = String.format("http://%s/free", comfyUIConfig.getServerAddress());
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(RequestBody.create("{\"unload_models\":true, \"free_memory\":true}", MediaType.get("application/json")))
+                    .build();
+
+            try (Response response = httpClient.newCall(request).execute()) {
+                if (response.isSuccessful()) {
+                    log.info("Successfully requested ComfyUI to free memory/unload models.");
+                } else {
+                    log.warn("Failed to free memory: {}", response.code());
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Error triggering memory cleanup: {}", e.getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ com\example\dosh\integration\ai\OpenAIClient.class
 com\example\dosh\config\OpenAIConfig.class
 com\example\dosh\util\HttpUtils.class
 com\example\dosh\DoshApplication.class
+com\example\dosh\integration\comfyui\ComfyUIWorkflowTemplates.class
 com\example\dosh\api\controller\AminController.class
 com\example\dosh\integration\comfyui\ComfyUIClient.class
 com\example\dosh\integration\chatglm\ChatGLMClient$1.class
@@ -11,6 +12,7 @@ com\example\dosh\config\ComfyUIConfig.class
 com\example\dosh\model\dto\intent\IntentRequest.class
 com\example\dosh\model\dto\ChatRequestDTO.class
 com\example\dosh\service\chat\ChatService.class
+META-INF\spring-configuration-metadata.json
 com\example\dosh\config\JacksonConfig.class
 com\example\dosh\integration\comfyui\ComfyUIStreamHandler.class
 com\example\dosh\config\webConfig.class
@@ -26,16 +28,20 @@ com\example\dosh\integration\volcengine\VolcengineClient$1.class
 com\example\dosh\integration\chatglm\ChatGLMClient.class
 com\example\dosh\util\JsonUtils.class
 com\example\dosh\integration\intent\IntentClient.class
+com\example\dosh\service\oss\MinioService.class
 com\example\dosh\exception\GlobalExceptionHandler.class
+com\example\dosh\config\MinioConfig.class
 com\example\dosh\api\controller\ImageController.class
 com\example\dosh\integration\comfyui\ComfyWorkflowRequest.class
 com\example\dosh\integration\ai\LLMClient.class
 com\example\dosh\api\controller\ChatController.class
+com\example\dosh\impl\oss\MinioServiceImpl.class
 com\example\dosh\impl\video\VideoServiceImpl.class
 com\example\dosh\service\video\VideoService.class
 com\example\dosh\security\SecurityConfig.class
 com\example\dosh\model\dto\intent\IntentResponse.class
 com\example\dosh\api\controller\VideoController.class
+com\example\dosh\integration\comfyui\ComfyUIClient$1.class
 com\example\dosh\impl\chat\ChatServiceImpl.class
 com\example\dosh\config\ChatGLMConfig.class
 com\example\dosh\integration\volcengine\VolcengineClient$2.class

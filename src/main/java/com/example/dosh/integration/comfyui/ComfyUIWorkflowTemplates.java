@@ -3,137 +3,114 @@ package com.example.dosh.integration.comfyui;
 public class                           ComfyUIWorkflowTemplates {
     public static final String WAN_2_1_WORKFLOW = """
 {
-  "75": {
-    "class_type": "UNETLoader",
-    "inputs": {
-      "unet_name": "wan2.2_i2v_high_noise_14B_fp16.safetensors",
-      "weight_dtype": "default"
+    "48": {
+      "class_type": "Flux2Scheduler",
+      "inputs": {
+        "steps": 20,
+        "width": 1248,
+        "height": 832
+      }
+    },
+
+    "22": {
+      "class_type": "BasicGuider",
+      "inputs": {
+        "model": ["12", 0],
+        "conditioning": ["26", 0]
+      }
+    },
+
+    "16": {
+      "class_type": "KSamplerSelect",
+      "inputs": {
+        "sampler_name": "euler"
+      }
+    },
+
+    "25": {
+      "class_type": "RandomNoise",
+      "inputs": {
+        "noise_seed": %SEED%,
+        "noise_mode": "randomize"
+      }
+    },
+
+    "12": {
+      "class_type": "UNETLoader",
+      "inputs": {
+        "unet_name": "flux2_dev_fp8mixed.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+
+    "38": {
+      "class_type": "CLIPLoader",
+      "inputs": {
+        "clip_name": "mistral_3_small_flux2_fp8.safetensors",
+        "type": "flux2",
+        "device": "default"
+      }
+    },
+
+    "10": {
+      "class_type": "VAELoader",
+      "inputs": {
+        "vae_name": "flux2-vae.safetensors"
+      }
+    },
+
+    "26": {
+      "class_type": "FluxGuidance",
+      "inputs": {
+        "conditioning": ["6", 0],
+        "guidance": 4
+      }
+    },
+
+    "13": {
+      "class_type": "SamplerCustomAdvanced",
+      "inputs": {
+        "noise": ["25", 0],
+        "guider": ["22", 0],
+        "sampler": ["16", 0],
+        "sigmas": ["48", 0],
+        "latent_image": ["47", 0]
+      }
+    },
+
+    "8": {
+      "class_type": "VAEDecode",
+      "inputs": {
+        "samples": ["13", 0],
+        "vae": ["10", 0]
+      }
+    },
+
+    "9": {
+      "class_type": "SaveImage",
+      "inputs": {
+        "images": ["8", 0],
+        "filename_prefix": "Flux2"
+      }
+    },
+
+    "6": {
+      "class_type": "CLIPTextEncode",
+      "inputs": {
+        "clip": ["38", 0],
+        "text": "%POSITIVE_PROMPT%"
+      }
+    },
+
+    "47": {
+      "class_type": "EmptyFlux2LatentImage",
+      "inputs": {
+        "width": 832,
+        "height": 1248,
+        "batch_size": 1
+      }
     }
-  },
-  "83": {
-    "class_type": "LoraLoaderModelOnly",
-    "inputs": {
-      "model": ["75", 0],
-      "lora_name": "wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
-      "strength_model": 1.0
-    }
-  },
-  "76": {
-    "class_type": "UNETLoader",
-    "inputs": {
-      "unet_name": "wan2.2_i2v_low_noise_14B_fp16.safetensors",
-      "weight_dtype": "default"
-    }
-  },
-  "85": {
-    "class_type": "LoraLoaderModelOnly",
-    "inputs": {
-      "model": ["76", 0],
-      "lora_name": "wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors",
-      "strength_model": 1.0
-    }
-  },
-  "82": {
-    "class_type": "ModelSamplingSD3",
-    "inputs": {
-      "model": ["83", 0],
-      "shift": 5
-    }
-  },
-  "86": {
-    "class_type": "ModelSamplingSD3",
-    "inputs": {
-      "model": ["85", 0],
-      "shift": 5
-    }
-  },
-  "71": {
-    "class_type": "CLIPLoader",
-    "inputs": {
-      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
-      "type": "wan",
-      "device": "default"
-    }
-  },
-  "89": {
-    "class_type": "CLIPTextEncode",
-    "inputs": {
-      "clip": ["71", 0],
-      "text": "%POSITIVE_PROMPT%"
-    }
-  },
-  "72": {
-    "class_type": "CLIPTextEncode",
-    "inputs": {
-      "clip": ["71", 0],
-      "text": ""
-    }
-  },
-  "73": {
-    "class_type": "VAELoader",
-    "inputs": {
-      "vae_name": "wan_2.1_vae.safetensors"
-    }
-  },
-  "74": {
-    "class_type": "EmptyHunyuanLatentVideo",
-    "inputs": {
-      "width": 1280,
-      "height": 720,
-      "length": 1,
-      "batch_size": 1
-    }
-  },
-  "81": {
-    "class_type": "KSamplerAdvanced",
-    "inputs": {
-      "model": ["82", 0],
-      "positive": ["89", 0],
-      "negative": ["72", 0],
-      "latent_image": ["74", 0],
-      "add_noise": "enable",
-      "noise_seed": 342386651972596,
-      "steps": 4,
-      "cfg": 1,
-      "sampler_name": "euler",
-      "scheduler": "simple",
-      "start_at_step": 0,
-      "end_at_step": 2,
-      "return_with_leftover_noise": "enable"
-    }
-  },
-  "78": {
-    "class_type": "KSamplerAdvanced",
-    "inputs": {
-      "model": ["86", 0],
-      "positive": ["89", 0],
-      "negative": ["72", 0],
-      "latent_image": ["81", 0],
-      "add_noise": "disable",
-      "noise_seed": 0,
-      "steps": 4,
-      "cfg": 1,
-      "sampler_name": "euler",
-      "scheduler": "simple",
-      "start_at_step": 2,
-      "end_at_step": 4,
-      "return_with_leftover_noise": "disable"
-    }
-  },
-  "87": {
-    "class_type": "VAEDecode",
-    "inputs": {
-      "samples": ["78", 0],
-      "vae": ["73", 0]
-    }
-  },
-  "118": {
-    "class_type": "SaveImage",
-    "inputs": {
-      "filename_prefix": "dosh_wan",
-      "images": ["87", 0]
-    }
-  }
 }
+
 """;
 }
